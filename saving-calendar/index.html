@@ -5,365 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>にゃんこ節約カレンダー</title>
 <style>
-  :root {
-    --bg: #fff7f0;
-    --card: #ffffff;
-    --text: #35251e;
-    --sub: #7a6257;
-    --accent: #ff9f8a;
-    --accent2: #ffd166;
-    --good: #7bd88f;
-    --bad: #ff8fab;
-    --line: #f0ddd2;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-    background: linear-gradient(180deg, var(--bg), #fff);
-    color: var(--text);
-  }
-  .app {
-    max-width: 520px;
-    margin: 0 auto;
-    padding: 18px;
-  }
-  h1 {
-    font-size: 24px;
-    margin: 8px 0 4px;
-  }
-  .subtitle {
-    color: var(--sub);
-    font-size: 14px;
-    margin-bottom: 16px;
-  }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 22px;
-    padding: 16px;
-    box-shadow: 0 8px 20px rgba(80, 50, 30, .08);
-    margin-bottom: 14px;
-  }
-  .stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .stat {
-    background: #fffaf6;
-    border-radius: 16px;
-    padding: 12px;
-  }
-  .label {
-    color: var(--sub);
-    font-size: 12px;
-  }
-  .value {
-    font-weight: 800;
-    font-size: 20px;
-    margin-top: 4px;
-  }
-  .progress {
-    height: 14px;
-    background: #f4e5dc;
-    border-radius: 999px;
-    overflow: hidden;
-    margin-top: 10px;
-  }
-  .bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--good), var(--accent2));
-    transition: width .25s ease;
-  }
-  .monthRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  button {
-    border: 0;
-    border-radius: 999px;
-    background: var(--accent);
-    color: white;
-    font-weight: 700;
-    padding: 10px 14px;
-    cursor: pointer;
-  }
-  button.secondary {
-    background: #f2dfd4;
-    color: var(--text);
-  }
-  .calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 7px;
-    margin-top: 12px;
-  }
-  .dow {
-    text-align: center;
-    font-size: 12px;
-    color: var(--sub);
-    padding: 4px 0;
-  }
-  .day {
-    min-height: 58px;
-    background: #fffaf6;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 6px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    cursor: pointer;
-  }
-  .day.empty {
-    background: transparent;
-    border: 0;
-    cursor: default;
-  }
-  .date {
-    font-size: 12px;
-    color: var(--sub);
-  }
-  .stamp {
-    font-size: 24px;
-    text-align: center;
-    line-height: 1;
-  }
-  .selected {
-    outline: 3px solid rgba(255,159,138,.35);
-  }
-  .stampPicker {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-  }
-  .stampBtn {
-    background: #fffaf6;
-    border: 1px solid var(--line);
-    color: var(--text);
-    font-size: 22px;
-    border-radius: 16px;
-    padding: 10px;
-  }
-  input {
-    width: 100%;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 12px;
-    font-size: 16px;
-    margin-top: 6px;
-  }
-  .row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .mini {
-    font-size: 13px;
-    color: var(--sub);
-    margin-top: 8px;
-    line-height: 1.5;
-  }
-  .log {
-    max-height: 140px;
-    overflow: auto;
-    font-size: 14px;
-    line-height: 1.8;
-  }
-  .pill {
-    display:inline-block;
-    background:#fff0e8;
-    border-radius:999px;
-    padding:4px 9px;
-    margin: 3px 3px 0 0;
-    font-size:12px;
-  }
+:root{--bg:#fff7f0;--card:#fff;--text:#35251e;--sub:#7a6257;--accent:#ff9f8a;--accent2:#ffd166;--good:#7bd88f;--line:#f0ddd2}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:linear-gradient(180deg,var(--bg),#fff);color:var(--text)}
+.app{max-width:520px;margin:0 auto;padding:18px}h1{font-size:24px;margin:8px 0 4px}.subtitle{color:var(--sub);font-size:14px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 8px 20px rgba(80,50,30,.08);margin-bottom:14px}
+.stats,.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#fffaf6;border-radius:16px;padding:12px}.label,.mini{color:var(--sub);font-size:13px}.label{font-size:12px}.value{font-weight:800;font-size:20px;margin-top:4px}
+.progress{height:14px;background:#f4e5dc;border-radius:999px;overflow:hidden;margin-top:10px}.bar{height:100%;width:0%;background:linear-gradient(90deg,var(--good),var(--accent2));transition:.25s}
+.monthRow,.logHead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+button{border:0;border-radius:999px;background:var(--accent);color:white;font-weight:700;padding:10px 14px;cursor:pointer}button.secondary{background:#f2dfd4;color:var(--text)}button.danger{background:#ffe3e3;color:#9b2226}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:12px}.dow{text-align:center;font-size:12px;color:var(--sub);padding:4px 0}
+.day{min-height:58px;background:#fffaf6;border:1px solid var(--line);border-radius:14px;padding:6px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}.day.empty{background:transparent;border:0;cursor:default}.date{font-size:12px;color:var(--sub)}.stamp{font-size:24px;text-align:center;line-height:1}.selected{outline:3px solid rgba(255,159,138,.35)}
+.stampPicker{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stampBtn{background:#fffaf6;border:1px solid var(--line);color:var(--text);font-size:22px;border-radius:16px;padding:10px}
+input{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px;font-size:16px;margin-top:6px}.mini{margin-top:8px;line-height:1.5}.log{max-height:190px;overflow:auto;font-size:14px;line-height:1.8}
+.pill{display:inline-block;background:#fff0e8;border-radius:999px;padding:4px 9px;margin:3px 3px 0 0;font-size:12px}.logItem{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border-bottom:1px solid #f7e8df;padding:6px 0}.smallDel{padding:6px 10px;font-size:12px;background:#f2dfd4;color:var(--text)}
 </style>
 </head>
 <body>
 <div class="app">
-  <h1>🐱 にゃんこ節約カレンダー</h1>
-  <div class="subtitle">使わなかった日を、ちゃんと勝ちにするアプリにゃ。</div>
+<h1>🐱 にゃんこ節約カレンダー</h1>
+<div class="subtitle">使わなかった日を、ちゃんと勝ちにするアプリにゃ。</div>
 
-  <div class="card">
-    <div class="stats">
-      <div class="stat">
-        <div class="label">今月使った金額</div>
-        <div class="value" id="spent">¥0</div>
-      </div>
-      <div class="stat">
-        <div class="label">残り予算</div>
-        <div class="value" id="left">¥40,000</div>
-      </div>
-    </div>
-    <div class="progress"><div class="bar" id="bar"></div></div>
-    <div class="mini" id="message">今日も財布を守るにゃ。防衛戦開始。</div>
-  </div>
+<div class="card">
+<div class="stats"><div class="stat"><div class="label">今月使った金額</div><div class="value" id="spent">¥0</div></div><div class="stat"><div class="label">残り予算</div><div class="value" id="left">¥40,000</div></div></div>
+<div class="progress"><div class="bar" id="bar"></div></div><div class="mini" id="message">今日も財布を守るにゃ。防衛戦開始。</div>
+</div>
 
-  <div class="card">
-    <div class="row">
-      <label>
-        <span class="label">月予算</span>
-        <input id="budget" type="number" value="40000">
-      </label>
-      <label>
-        <span class="label">貯蓄目標</span>
-        <input id="savingGoal" type="number" value="20000">
-      </label>
-    </div>
-    <div class="mini">みつき仕様：月4万円まで・目標2万円貯蓄で初期設定済みにゃ。</div>
-  </div>
+<div class="card">
+<div class="row"><label><span class="label">月予算</span><input id="budget" type="number" value="40000"></label><label><span class="label">貯蓄目標</span><input id="savingGoal" type="number" value="20000"></label></div>
+<div class="mini">みつき仕様：月4万円まで・目標2万円貯蓄で初期設定済みにゃ。</div>
+</div>
 
-  <div class="card">
-    <div class="monthRow">
-      <button class="secondary" id="prev">‹ 前月</button>
-      <strong id="monthTitle"></strong>
-      <button class="secondary" id="next">翌月 ›</button>
-    </div>
-    <div class="calendar" id="calendar"></div>
-  </div>
+<div class="card">
+<div class="monthRow"><button class="secondary" id="prev">‹ 前月</button><strong id="monthTitle"></strong><button class="secondary" id="next">翌月 ›</button></div>
+<div class="calendar" id="calendar"></div>
+</div>
 
-  <div class="card">
-    <strong>選んだ日：<span id="selectedText">未選択</span></strong>
-    <div class="mini">スタンプを押すにゃ。押すだけで勝ちログ。</div>
-    <div class="stampPicker">
-      <button class="stampBtn" data-stamp="🐟">🐟</button>
-      <button class="stampBtn" data-stamp="💮">💮</button>
-      <button class="stampBtn" data-stamp="✨">✨</button>
-      <button class="stampBtn" data-stamp="😿">😿</button>
-      <button class="stampBtn" data-stamp="🍱">🍱</button>
-      <button class="stampBtn" data-stamp="☕">☕</button>
-      <button class="stampBtn" data-stamp="🛒">🛒</button>
-      <button class="stampBtn" data-stamp="">消す</button>
-    </div>
+<div class="card">
+<strong>選んだ日：<span id="selectedText">未選択</span></strong>
+<div class="mini">スタンプを押すにゃ。押すだけで勝ちログ。</div>
+<div class="stampPicker">
+<button class="stampBtn" data-stamp="🐟">🐟</button><button class="stampBtn" data-stamp="💮">💮</button><button class="stampBtn" data-stamp="✨">✨</button><button class="stampBtn" data-stamp="😿">😿</button>
+<button class="stampBtn" data-stamp="🍱">🍱</button><button class="stampBtn" data-stamp="☕">☕</button><button class="stampBtn" data-stamp="🛒">🛒</button><button class="stampBtn" data-stamp="">消す</button>
+</div>
+<label style="display:block;margin-top:12px;"><span class="label">この日の出費</span><input id="amount" type="number" placeholder="例：647"></label>
+<label style="display:block;margin-top:8px;"><span class="label">メモ</span><input id="memo" type="text" placeholder="例：やよいちゃんトイレ砂"></label>
+<button id="save" style="width:100%;margin-top:10px;">記録する</button>
+<button id="deleteSelected" class="danger" style="width:100%;margin-top:8px;">この日の記録を消す</button>
+</div>
 
-    <label style="display:block;margin-top:12px;">
-      <span class="label">この日の出費</span>
-      <input id="amount" type="number" placeholder="例：647">
-    </label>
-    <label style="display:block;margin-top:8px;">
-      <span class="label">メモ</span>
-      <input id="memo" type="text" placeholder="例：やよいちゃんトイレ砂">
-    </label>
-    <button id="save" style="width:100%;margin-top:10px;">記録する</button>
-  </div>
-
-  <div class="card">
-    <strong>今月ログ</strong>
-    <div class="log" id="log"></div>
-  </div>
+<div class="card">
+<div class="logHead"><strong>今月ログ</strong><button id="clearMonth" class="danger">今月ログを全部消す</button></div>
+<div class="log" id="log"></div>
+</div>
 </div>
 
 <script>
-const yen = n => "¥" + Math.max(0, Math.round(n)).toLocaleString();
-let current = new Date();
-let selectedKey = null;
-let data = JSON.parse(localStorage.getItem("nyankoBudgetApp") || "{}");
-
-const calendar = document.getElementById("calendar");
-const monthTitle = document.getElementById("monthTitle");
-const selectedText = document.getElementById("selectedText");
-const amount = document.getElementById("amount");
-const memo = document.getElementById("memo");
-const budget = document.getElementById("budget");
-const savingGoal = document.getElementById("savingGoal");
-
-function keyOf(y,m,d){ return `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`; }
-function monthKey(){ return `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,"0")}`; }
-function saveData(){ localStorage.setItem("nyankoBudgetApp", JSON.stringify(data)); }
-
+const yen=n=>"¥"+Math.max(0,Math.round(n)).toLocaleString();
+let current=new Date(),selectedKey=null;
+let data=JSON.parse(localStorage.getItem("nyankoBudgetApp")||"{}");
+const $=id=>document.getElementById(id);
+const calendar=$("calendar"),monthTitle=$("monthTitle"),selectedText=$("selectedText"),amount=$("amount"),memo=$("memo"),budget=$("budget"),savingGoal=$("savingGoal");
+function keyOf(y,m,d){return `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`}
+function monthKey(){return `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,"0")}`}
+function saveData(){localStorage.setItem("nyankoBudgetApp",JSON.stringify(data))}
 function render(){
-  calendar.innerHTML = "";
-  const y = current.getFullYear();
-  const m = current.getMonth();
-  monthTitle.textContent = `${y}年 ${m+1}月`;
-  ["日","月","火","水","木","金","土"].forEach(d=>{
-    const el = document.createElement("div");
-    el.className = "dow";
-    el.textContent = d;
-    calendar.appendChild(el);
-  });
-  const first = new Date(y,m,1).getDay();
-  const days = new Date(y,m+1,0).getDate();
-  for(let i=0;i<first;i++){
-    const empty = document.createElement("div");
-    empty.className = "day empty";
-    calendar.appendChild(empty);
-  }
-  for(let d=1; d<=days; d++){
-    const key = keyOf(y,m,d);
-    const item = data[key] || {};
-    const el = document.createElement("div");
-    el.className = "day" + (key === selectedKey ? " selected" : "");
-    el.innerHTML = `<div class="date">${d}</div><div class="stamp">${item.stamp || ""}</div>`;
-    el.onclick = () => selectDay(key);
-    calendar.appendChild(el);
-  }
-  renderStats();
+ calendar.innerHTML="";const y=current.getFullYear(),m=current.getMonth();monthTitle.textContent=`${y}年 ${m+1}月`;
+ ["日","月","火","水","木","金","土"].forEach(d=>{const el=document.createElement("div");el.className="dow";el.textContent=d;calendar.appendChild(el)});
+ const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate();
+ for(let i=0;i<first;i++){const e=document.createElement("div");e.className="day empty";calendar.appendChild(e)}
+ for(let d=1;d<=days;d++){const key=keyOf(y,m,d),item=data[key]||{},el=document.createElement("div");el.className="day"+(key===selectedKey?" selected":"");el.innerHTML=`<div class="date">${d}</div><div class="stamp">${item.stamp||""}</div>`;el.onclick=()=>selectDay(key);calendar.appendChild(el)}
+ renderStats()
 }
-
-function selectDay(key){
-  selectedKey = key;
-  selectedText.textContent = key;
-  const item = data[key] || {};
-  amount.value = item.amount || "";
-  memo.value = item.memo || "";
-  render();
-}
-
-document.querySelectorAll(".stampBtn").forEach(btn=>{
-  btn.onclick = () => {
-    if(!selectedKey) return;
-    data[selectedKey] = data[selectedKey] || {};
-    data[selectedKey].stamp = btn.dataset.stamp;
-    saveData();
-    render();
-  };
-});
-
-document.getElementById("save").onclick = () => {
-  if(!selectedKey) return;
-  data[selectedKey] = data[selectedKey] || {};
-  data[selectedKey].amount = Number(amount.value || 0);
-  data[selectedKey].memo = memo.value.trim();
-  if(!data[selectedKey].stamp) data[selectedKey].stamp = data[selectedKey].amount > 0 ? "🛒" : "💮";
-  saveData();
-  render();
-};
-
-[budget, savingGoal].forEach(el => el.oninput = renderStats);
-
+function selectDay(key){selectedKey=key;selectedText.textContent=key;const item=data[key]||{};amount.value=item.amount||"";memo.value=item.memo||"";render()}
+document.querySelectorAll(".stampBtn").forEach(btn=>{btn.onclick=()=>{if(!selectedKey)return;data[selectedKey]=data[selectedKey]||{};data[selectedKey].stamp=btn.dataset.stamp;saveData();render()}});
+$("save").onclick=()=>{if(!selectedKey)return;data[selectedKey]=data[selectedKey]||{};data[selectedKey].amount=Number(amount.value||0);data[selectedKey].memo=memo.value.trim();if(!data[selectedKey].stamp)data[selectedKey].stamp=data[selectedKey].amount>0?"🛒":"💮";saveData();render()};
+$("deleteSelected").onclick=()=>{if(!selectedKey)return;if(confirm("この日の記録を消すにゃ？")){delete data[selectedKey];amount.value="";memo.value="";saveData();render()}};
+$("clearMonth").onclick=()=>{const mk=monthKey();const count=Object.keys(data).filter(k=>k.startsWith(mk)).length;if(count===0)return;if(confirm("今月ログを全部消すにゃ？")){Object.keys(data).forEach(k=>{if(k.startsWith(mk))delete data[k]});selectedKey=null;selectedText.textContent="未選択";amount.value="";memo.value="";saveData();render()}};
+[budget,savingGoal].forEach(el=>el.oninput=renderStats);
+function deleteLog(key){if(confirm(`${key} の記録を消すにゃ？`)){delete data[key];if(selectedKey===key){selectedKey=null;selectedText.textContent="未選択";amount.value="";memo.value=""}saveData();render()}}
 function renderStats(){
-  const mk = monthKey();
-  const entries = Object.entries(data).filter(([k]) => k.startsWith(mk));
-  const spent = entries.reduce((sum,[,v]) => sum + Number(v.amount || 0), 0);
-  const b = Number(budget.value || 40000);
-  const goal = Number(savingGoal.value || 20000);
-  const left = b - spent;
-  document.getElementById("spent").textContent = yen(spent);
-  document.getElementById("left").textContent = left >= 0 ? yen(left) : "−" + yen(Math.abs(left));
-  document.getElementById("bar").style.width = Math.min(100, spent / b * 100) + "%";
-
-  let msg = "";
-  if (spent <= b - goal) msg = "神。貯蓄目標ペースに乗ってるにゃ。みつきえらすぎ案件。";
-  else if (spent <= b) msg = "まだ予算内にゃ。ここから守れば勝てる。";
-  else msg = "予算オーバーにゃ。でも記録してる時点で立て直せる。";
-  document.getElementById("message").textContent = msg;
-
-  const log = entries
-    .sort(([a],[b]) => a.localeCompare(b))
-    .map(([k,v]) => `<div><span class="pill">${k}</span> ${v.stamp || ""} ${v.memo || "メモなし"} ${v.amount ? yen(v.amount) : ""}</div>`)
-    .join("");
-  document.getElementById("log").innerHTML = log || "<div class='mini'>まだ記録なしにゃ。</div>";
+ const mk=monthKey(),entries=Object.entries(data).filter(([k])=>k.startsWith(mk));const spent=entries.reduce((s,[,v])=>s+Number(v.amount||0),0),b=Number(budget.value||40000),goal=Number(savingGoal.value||20000),left=b-spent;
+ $("spent").textContent=yen(spent);$("left").textContent=left>=0?yen(left):"−"+yen(Math.abs(left));$("bar").style.width=Math.min(100,spent/b*100)+"%";
+ $("message").textContent=spent<=b-goal?"神。貯蓄目標ペースに乗ってるにゃ。みつきえらすぎ案件。":spent<=b?"まだ予算内にゃ。ここから守れば勝てる。":"予算オーバーにゃ。でも記録してる時点で立て直せる。";
+ $("log").innerHTML=entries.sort(([a],[b])=>a.localeCompare(b)).map(([k,v])=>`<div class="logItem"><div><span class="pill">${k}</span> ${v.stamp||""} ${v.memo||"メモなし"} ${v.amount?yen(v.amount):""}</div><button class="smallDel" onclick="deleteLog('${k}')">削除</button></div>`).join("")||"<div class='mini'>まだ記録なしにゃ。</div>";
 }
-
-document.getElementById("prev").onclick = () => { current.setMonth(current.getMonth()-1); selectedKey=null; selectedText.textContent="未選択"; render(); };
-document.getElementById("next").onclick = () => { current.setMonth(current.getMonth()+1); selectedKey=null; selectedText.textContent="未選択"; render(); };
-
+$("prev").onclick=()=>{current.setMonth(current.getMonth()-1);selectedKey=null;selectedText.textContent="未選択";render()};
+$("next").onclick=()=>{current.setMonth(current.getMonth()+1);selectedKey=null;selectedText.textContent="未選択";render()};
 render();
 </script>
 </body>

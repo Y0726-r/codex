@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>にゃんこ節約カレンダー v4</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fff7f0;color:#35251e;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}.app{max-width:520px;margin:0 auto;padding:16px}h1{font-size:24px;margin:8px 0}.card{background:#fff;border:1px solid #f0ddd2;border-radius:20px;padding:14px;margin:12px 0;box-shadow:0 6px 18px rgba(80,50,30,.08)}.sub{font-size:13px;color:#7a6257;line-height:1.5}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.box{background:#fffaf6;border-radius:16px;padding:12px}.label{font-size:12px;color:#7a6257}.value{font-weight:800;font-size:20px}.barWrap{height:14px;background:#f4e5dc;border-radius:99px;overflow:hidden;margin-top:10px}.bar{height:100%;width:0;background:linear-gradient(90deg,#7bd88f,#ffd166)}button{border:0;border-radius:999px;padding:10px 12px;font-weight:700;background:#ff9f8a;color:white}button.gray{background:#f2dfd4;color:#35251e}button.red{background:#ffe3e3;color:#9b2226}.month{display:flex;justify-content:space-between;align-items:center;gap:8px}.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}.dow{text-align:center;font-size:12px;color:#7a6257}.day{min-height:54px;border:1px solid #f0ddd2;background:#fffaf6;color:#35251e;border-radius:14px;padding:5px;display:flex;flex-direction:column;justify-content:space-between}.empty{background:transparent;border:0}.selected{outline:3px solid rgba(255,159,138,.45);background:#fff1ea}.date{font-size:12px;color:#7a6257}.stamp{text-align:center;font-size:22px}.stamps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stampBtn{background:#fffaf6;color:#35251e;border:1px solid #f0ddd2;border-radius:14px;font-size:22px}input{width:100%;font-size:16px;padding:12px;border:1px solid #f0ddd2;border-radius:14px;margin-top:5px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.logItem{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border-bottom:1px solid #f7e8df;padding:7px 0}.pill{display:inline-block;background:#fff0e8;border-radius:99px;padding:3px 8px;font-size:12px}.log{max-height:240px;overflow:auto}.full{width:100%;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="app">
+<h1>🐱 にゃんこ節約カレンダー v4</h1>
+<div class="sub">まずは安定版。日付を押す → 金額とメモ → 記録する、だけにゃ。</div>
+
+<div class="card">
+<div class="stats"><div class="box"><div class="label">今月使った金額</div><div class="value" id="spent">¥0</div></div><div class="box"><div class="label">残り予算</div><div class="value" id="left">¥40,000</div></div></div>
+<div class="barWrap"><div class="bar" id="bar"></div></div><div class="sub" id="msg">財布防衛スタートにゃ。</div>
+</div>
+
+<div class="card"><div class="row"><label><div class="label">月予算</div><input id="budget" type="number" value="40000"></label><label><div class="label">貯蓄目標</div><input id="goal" type="number" value="20000"></label></div></div>
+
+<div class="card"><div class="month"><button id="prev" class="gray">‹ 前月</button><b id="title"></b><button id="next" class="gray">翌月 ›</button></div><div class="cal" id="cal"></div></div>
+
+<div class="card">
+<b>選んだ日：<span id="selected"></span></b>
+<div class="sub">スタンプだけでも、金額ありでもOKにゃ。</div>
+<div class="stamps"><button class="stampBtn" data-s="💮">💮</button><button class="stampBtn" data-s="🐟">🐟</button><button class="stampBtn" data-s="✨">✨</button><button class="stampBtn" data-s="😿">😿</button><button class="stampBtn" data-s="🍱">🍱</button><button class="stampBtn" data-s="☕">☕</button><button class="stampBtn" data-s="🛒">🛒</button><button class="stampBtn" data-s="">消す</button></div>
+<label><div class="label" style="margin-top:10px">この日の出費</div><input id="amount" type="number" inputmode="numeric" placeholder="例：647"></label>
+<label><div class="label" style="margin-top:8px">メモ</div><input id="memo" type="text" placeholder="例：やよいちゃんトイレ砂"></label>
+<button id="save" class="full">記録する</button>
+<button id="delDay" class="full red">この日の記録を消す</button>
+</div>
+
+<div class="card"><div class="month"><b>今月ログ</b><button id="clear" class="red">全部消す</button></div><div id="log" class="log"></div></div>
+</div>
+<script>
+var DATA_KEY='nyankoSavingV4';
+var data=JSON.parse(localStorage.getItem(DATA_KEY)||'{}');
+var now=new Date();
+var viewY=now.getFullYear();
+var viewM=now.getMonth();
+var selected=makeKey(viewY,viewM,now.getDate());
+var pickedStamp='';
+function el(id){return document.getElementById(id)}
+function yen(n){n=Math.round(Number(n)||0);return '¥'+n.toLocaleString()}
+function makeKey(y,m,d){return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0')}
+function monthKey(){return viewY+'-'+String(viewM+1).padStart(2,'0')}
+function saveStore(){localStorage.setItem(DATA_KEY,JSON.stringify(data))}
+function loadForm(){var item=data[selected]||{};el('selected').textContent=selected;el('amount').value=item.amount||'';el('memo').value=item.memo||'';pickedStamp=item.stamp||''}
+function renderCal(){var cal=el('cal');cal.innerHTML='';el('title').textContent=viewY+'年 '+(viewM+1)+'月';['日','月','火','水','木','金','土'].forEach(function(x){var d=document.createElement('div');d.className='dow';d.textContent=x;cal.appendChild(d)});var first=new Date(viewY,viewM,1).getDay();var days=new Date(viewY,viewM+1,0).getDate();for(var i=0;i<first;i++){var em=document.createElement('div');em.className='day empty';cal.appendChild(em)}for(var d=1;d<=days;d++){var k=makeKey(viewY,viewM,d);var item=data[k]||{};var b=document.createElement('button');b.type='button';b.className='day'+(k===selected?' selected':'');b.setAttribute('data-key',k);b.innerHTML='<span class="date">'+d+'</span><span class="stamp">'+(item.stamp||'')+'</span>';cal.appendChild(b)}}
+function renderStats(){var mk=monthKey();var spent=0;var html='';Object.keys(data).sort().forEach(function(k){if(k.indexOf(mk)===0){var v=data[k];spent+=Number(v.amount)||0;html+='<div class="logItem"><div><span class="pill">'+k+'</span> '+(v.stamp||'')+' '+(v.memo||'メモなし')+' '+(v.amount?yen(v.amount):'')+'</div><button class="gray" data-del="'+k+'">削除</button></div>'}});var budget=Number(el('budget').value)||40000;var goal=Number(el('goal').value)||20000;var left=budget-spent;el('spent').textContent=yen(spent);el('left').textContent=left>=0?yen(left):'−'+yen(Math.abs(left));el('bar').style.width=Math.min(100,spent/budget*100)+'%';el('msg').textContent=spent<=budget-goal?'神。貯蓄目標ペースにゃ。えらすぎる。':spent<=budget?'まだ予算内にゃ。守れる。':'予算オーバーにゃ。でも記録できてるから立て直せる。';el('log').innerHTML=html||'<div class="sub">まだ記録なしにゃ。</div>'}
+function render(){renderCal();loadForm();renderStats()}
+el('cal').onclick=function(e){var b=e.target.closest('button[data-key]');if(!b)return;selected=b.getAttribute('data-key');loadForm();renderCal()};
+document.querySelectorAll('.stampBtn').forEach(function(b){b.onclick=function(){pickedStamp=b.getAttribute('data-s');data[selected]=data[selected]||{};data[selected].stamp=pickedStamp;saveStore();render()}});
+el('save').onclick=function(){var amount=Number(el('amount').value)||0;var memo=el('memo').value.trim();data[selected]=data[selected]||{};data[selected].amount=amount;data[selected].memo=memo;data[selected].stamp=pickedStamp||data[selected].stamp||(amount>0?'🛒':'💮');saveStore();render()};
+el('delDay').onclick=function(){if(!data[selected])return;if(confirm('この日の記録を消すにゃ？')){delete data[selected];saveStore();render()}};
+el('clear').onclick=function(){var mk=monthKey();var keys=Object.keys(data).filter(function(k){return k.indexOf(mk)===0});if(!keys.length)return;if(confirm('今月ログを全部消すにゃ？')){keys.forEach(function(k){delete data[k]});saveStore();render()}};
+el('log').onclick=function(e){var b=e.target.closest('button[data-del]');if(!b)return;var k=b.getAttribute('data-del');if(confirm(k+' を消すにゃ？')){delete data[k];saveStore();render()}};
+el('prev').onclick=function(){viewM--;if(viewM<0){viewM=11;viewY--}selected=makeKey(viewY,viewM,1);render()};
+el('next').onclick=function(){viewM++;if(viewM>11){viewM=0;viewY++}selected=makeKey(viewY,viewM,1);render()};
+el('budget').oninput=renderStats;el('goal').oninput=renderStats;
+render();
+</script>
+</body>
+</html>
